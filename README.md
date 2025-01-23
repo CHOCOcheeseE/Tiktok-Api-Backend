@@ -192,3 +192,250 @@ await user.destroy();
 - Pastikan `JWT_SECRET` telah diatur pada variabel lingkungan.
 - Gunakan HTTPS untuk melindungi data sensitif seperti password dan token.
 
+
+
+---
+
+### *Penjelasan Kode*
+
+#### *Upload Video*
+
+##### *Langkah-Langkah*
+1. *Ambil Data Pengguna dan Input*
+   ```javascript
+   const { title, description, video_url } = req.body;
+   const userId = req.user.id;
+   ```
+   - Data video diperoleh dari *request body*, sementara ID pengguna didapatkan dari token middleware.
+
+2. *Simpan Data Video ke Database*
+   ```javascript
+   const newVideo = await Video.create({ user_id: userId, title, description, video_url });
+   ```
+   - Data video disimpan dalam tabel `Video`.
+
+3. *Respon*
+   ```javascript
+   res.status(201).json({ message: "Video uploaded successfully", video: newVideo });
+   ```
+   - Status 201 (Created) dikembalikan jika unggah berhasil.
+
+---
+
+#### *Get All Videos*
+
+##### *Langkah-Langkah*
+1. *Ambil Semua Data Video*
+   ```javascript
+   const videos = await Video.findAll();
+   ```
+   - Sistem mengambil semua data dari tabel `Video`.
+
+2. *Respon*
+   - Data video dikembalikan dengan status 200 (OK).
+
+---
+
+#### *Get Video Details*
+
+##### *Langkah-Langkah*
+1. *Cari Video Berdasarkan ID*
+   ```javascript
+   const video = await Video.findByPk(id);
+   ```
+   - Sistem mencari data video berdasarkan ID dari *request parameter*.
+
+2. *Respon*
+   - Jika video ditemukan, status 200 (OK) dikembalikan dengan data video.
+   - Jika tidak ditemukan, status 404 (Not Found) dikembalikan.
+
+---
+
+#### *Update Video*
+
+##### *Langkah-Langkah*
+1. *Cari Video Berdasarkan ID*
+   ```javascript
+   const video = await Video.findByPk(id);
+   ```
+   - Sistem mencari video untuk diperbarui.
+
+2. *Perbarui Data Video*
+   ```javascript
+   video.title = title || video.title;
+   video.description = description || video.description;
+   video.video_url = video_url || video.video_url;
+   await video.save();
+   ```
+   - Sistem memperbarui data sesuai input yang diberikan.
+
+3. *Respon*
+   - Status 200 (OK) dikembalikan jika pembaruan berhasil.
+
+---
+
+#### *Delete Video*
+
+##### *Langkah-Langkah*
+1. *Cari Video Berdasarkan ID*
+   ```javascript
+   const video = await Video.findByPk(id);
+   ```
+   - Sistem mencari video yang akan dihapus.
+
+2. *Hapus Video*
+   ```javascript
+   await video.destroy();
+   ```
+   - Video dihapus dari database.
+
+3. *Respon*
+   - Status 200 (OK) dikembalikan jika penghapusan berhasil.
+
+---
+
+#### *Get Videos by User*
+
+##### *Langkah-Langkah*
+1. *Ambil Semua Video oleh Pengguna Tertentu*
+   ```javascript
+   const videos = await Video.findAll({ where: { user_id: userId } });
+   ```
+   - Sistem mencari semua video berdasarkan ID pengguna dari *request parameter*.
+
+2. *Respon*
+   - Jika tidak ada video, status 404 (Not Found) dikembalikan.
+   - Jika ada, status 200 (OK) dikembalikan dengan data video.
+
+---
+
+#### *Get Video Count*
+
+##### *Langkah-Langkah*
+1. *Hitung Jumlah Video*
+   ```javascript
+   const videoCount = await Video.count();
+   ```
+   - Sistem menghitung total jumlah video di database.
+
+2. *Respon*
+   - Status 200 (OK) dikembalikan dengan jumlah total video.
+
+---
+
+### *Endpoint: Video*
+
+#### *URL*
+1. **POST /api/video/upload**  
+2. **GET /api/video/all**  
+3. **GET /api/video/:id**  
+4. **PUT /api/video/:id**  
+5. **DELETE /api/video/:id**  
+6. **GET /api/video/user/:userId**  
+7. **GET /api/video/count**  
+
+---
+
+#### *Header*
+- Untuk endpoint `upload`, `update`, dan `delete`, sertakan token JWT di *header*:
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+
+---
+
+#### *Request Body*
+1. **Upload Video:**
+   ```json
+   {
+     "title": "Example Video",
+     "description": "This is an example video.",
+     "video_url": "http://example.com/video.mp4"
+   }
+   ```
+
+2. **Update Video:**
+   ```json
+   {
+     "title": "Updated Title",
+     "description": "Updated description.",
+     "video_url": "http://example.com/new_video.mp4"
+   }
+   ```
+
+---
+
+#### *Respon*
+
+##### *Respon Sukses*
+1. *Upload Video*:  
+   *Status Code*: 201 Created  
+   *Body*:
+   ```json
+   {
+     "message": "Video uploaded successfully",
+     "video": {
+       "id": 1,
+       "title": "Example Video",
+       "description": "This is an example video.",
+       "video_url": "http://example.com/video.mp4",
+       "user_id": 1
+     }
+   }
+   ```
+
+2. *Get All Videos*:  
+   *Status Code*: 200 OK  
+   *Body*:
+   ```json
+   {
+     "videos": [
+       {
+         "id": 1,
+         "title": "Example Video",
+         "description": "This is an example video.",
+         "video_url": "http://example.com/video.mp4",
+         "user_id": 1
+       }
+     ]
+   }
+   ```
+
+3. *Delete Video*:  
+   *Status Code*: 200 OK  
+   *Body*:
+   ```json
+   {
+     "message": "Video deleted successfully"
+   }
+   ```
+
+##### *Respon Gagal*
+1. *Data Tidak Ditemukan*:  
+   *Status Code*: 404 Not Found  
+   *Body*:
+   ```json
+   {
+     "message": "Video not found"
+   }
+   ```
+
+2. *Server Error*:  
+   *Status Code*: 500 Internal Server Error  
+   *Body*:
+   ```json
+   {
+     "message": "Error uploading video",
+     "error": "<error details>"
+   }
+   ```
+
+---
+
+#### *Catatan*
+- Endpoint `upload`, `update`, dan `delete` memerlukan autentikasi.
+- Validasi input penting untuk memastikan data video valid.
+
+
