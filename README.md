@@ -887,15 +887,90 @@ Endpoint ini digunakan untuk memeriksa apakah pengguna telah memberikan "like" p
 ---
 
 ## Endpoint Testing
-- Registrasi
-  (![1-endpoint testing registrasi](https://github.com/user-attachments/assets/55b8b7b7-ad75-4be4-bfad-04acb7970894)
-)
-- Login
-  (https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/2-login%20endpoint%20testing.png)
-- Edit User
-  (https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/3-edit%20user%20testing%20endpoint.png)
-- delete user
-  (https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/4-delete%20user%20testing%20endpoint.png)
+- **Registrasi**
+  ![1-endpoint testing registrasi](https://github.com/user-attachments/assets/55b8b7b7-ad75-4be4-bfad-04acb7970894)
+
+- **Login**
+  ![2-login endpoint testing](https://github.com/user-attachments/assets/e6bd010e-4be3-458c-91de-af87d15e9126)
+
+- **Edit User**
+  ![3-edit user testing endpoint](https://github.com/user-attachments/assets/72db0a27-e38e-47c4-9bd0-3f207f9c9826)
+
+- **delete user**
+  ![4-delete user testing endpoint](https://github.com/user-attachments/assets/e8656f61-0eb7-42ea-b5f3-304a5f8ac616)
+  
+- **Upload video**
+  ![5-upload video testing endpoint](https://github.com/user-attachments/assets/7c767f9b-bd39-4825-b372-daecf6b5ac03)
+
+- **Get all video**
+  ![6-get all video testing endpoint](https://github.com/user-attachments/assets/c3f12ab0-acaf-457c-9fd7-5a3e976b4a6a)
+
+- **Get video by id**
+  ![7-get video using id](https://github.com/user-attachments/assets/8680ec41-5e08-4d44-a0f2-12b6cdf00d5a)
+
+- **Edit video**
+  ![8-edit video](https://github.com/user-attachments/assets/564f9d34-d0e1-450a-a01c-fe05a50e3072)
+
+- **Delete Video**
+  ![9-delete video](https://github.com/user-attachments/assets/e1a2f995-2bf7-4acc-a333-2ba51705d562)
+
+- **Get video by user id**
+  ![10-get video by user id](https://github.com/user-attachments/assets/7749773a-f19c-4b05-8ab3-92f293d6f09c)
+
+- **Count video**
+  ![11-count video](https://github.com/user-attachments/assets/99279087-6cd5-451f-b0cc-de8b63c09e29)
+
+- **Like Video**
+  ![12-like video](https://github.com/user-attachments/assets/c79ab8c4-bdc7-49e8-89be-884e4ab9013d)
+
+- **Unlike video**
+  ![13-unlike video](https://github.com/user-attachments/assets/d24ae48d-e59b-4058-af12-77ea4bd7fb40)
+
+- **Count Like**
+  ![14-count like](https://github.com/user-attachments/assets/580b2af4-9b19-4fda-9140-4f808e775cc0)
+
+- **Check like**
+  ![15-check like](https://github.com/user-attachments/assets/6cc4963b-b307-4335-869a-0830bab97051)
+
+- **Comment video**
+  ![16-comment video](https://github.com/user-attachments/assets/eaef3f06-59df-4954-a818-21d26095470d)
+
+- **Get commnet by video id**
+  ![17-get comment by video id](https://github.com/user-attachments/assets/1db9d062-ca79-4a93-9000-d7ea9c3023d5)
+
+- **Edit comment**
+  ![18-edit comment](https://github.com/user-attachments/assets/0c82fff0-1418-4fa9-90c8-6f23f5ceacb4)
+
+- **Delete comment**
+  ![19-delete comment](https://github.com/user-attachments/assets/e99f981a-3b01-40ad-a176-bd8d9dc60dcf)
+
+- **Get comment by using comment id**
+  ![20-get comment by using comment id](https://github.com/user-attachments/assets/94ba6349-7a26-48c0-b176-efd632be9d06)
+
+- **edit comment**
+  ![21-edit comment](https://github.com/user-attachments/assets/3a454451-64a2-4ec2-a8a1-5361a653de7e)
+
+- **count comment**
+  ![22-count comment](https://github.com/user-attachments/assets/7d02ee18-84f2-4916-8c3f-d53443e846ad)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
