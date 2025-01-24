@@ -884,5 +884,17 @@ Endpoint ini digunakan untuk memeriksa apakah pengguna telah memberikan "like" p
 - Semua endpoint memerlukan autentikasi.
 - Validasi input penting untuk memastikan data komentar valid.
 
+---
+
+## Endpoint Testing
+- Registrasi
+  https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/1-endpoint%20testing%20registrasi.png
+- Login
+  https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/2-login%20endpoint%20testing.png
+- Edit User
+  https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/3-edit%20user%20testing%20endpoint.png
+- delete user
+  https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/4-delete%20user%20testing%20endpoint.png
+
 
 
