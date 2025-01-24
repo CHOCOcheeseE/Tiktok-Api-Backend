@@ -888,7 +888,7 @@ Endpoint ini digunakan untuk memeriksa apakah pengguna telah memberikan "like" p
 
 ## Endpoint Testing
 - Registrasi
-  (https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/1-endpoint%20testing%20registrasi.png)
+  (\Users\Acer id\Documents\PENUGASAN KULIAH MUHAMMAD FATHIR BAGAS\Tiktok-Api-Endpoint\ENDPOINT TESTING)
 - Login
   (https://github.com/CHOCOcheeseE/Tiktok-Api-Backend/blob/master/ENDPOINT%20TESTING/2-login%20endpoint%20testing.png)
 - Edit User
