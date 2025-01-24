@@ -196,7 +196,7 @@ await user.destroy();
 
 ---
 
-### *Penjelasan Kode*
+# Video
 
 #### *Upload Video*
 
@@ -437,5 +437,447 @@ await user.destroy();
 #### *Catatan*
 - Endpoint `upload`, `update`, dan `delete` memerlukan autentikasi.
 - Validasi input penting untuk memastikan data video valid.
+
+---
+
+# Comment
+
+#### *Add Comment*
+
+##### *Langkah-Langkah*
+1. *Ambil Data Pengguna dan Input*
+   ```javascript
+   const videoId = req.params.video_id;
+   const userId = req.user.id;
+   const { content } = req.body;
+   ```
+   - Data video diambil dari parameter URL, ID pengguna didapatkan dari token middleware, dan isi komentar dari *request body*.
+
+2. *Cek Keberadaan Video*
+   ```javascript
+   const video = await Video.findByPk(videoId);
+   ```
+   - Sistem memverifikasi keberadaan video sebelum menambahkan komentar.
+
+3. *Tambah Komentar ke Database*
+   ```javascript
+   const comment = await Comment.create({ user_id: userId, video_id: videoId, content });
+   ```
+   - Data komentar disimpan dalam tabel `Comment`.
+
+4. *Respon*
+   ```javascript
+   res.status(201).json({ message: "Comment added successfully", comment });
+   ```
+   - Status 201 (Created) dikembalikan jika komentar berhasil ditambahkan.
+
+---
+
+#### *Get Comments by Video*
+
+##### *Langkah-Langkah*
+1. *Ambil ID Video dari Parameter*
+   ```javascript
+   const videoId = req.params.video_id;
+   ```
+   - ID video diambil dari parameter URL.
+
+2. *Cek Keberadaan Video*
+   ```javascript
+   const video = await Video.findByPk(videoId);
+   ```
+   - Sistem memverifikasi keberadaan video sebelum mengambil komentar.
+
+3. *Ambil Komentar*
+   ```javascript
+   const comments = await Comment.findAll({ where: { video_id: videoId }, include: [{ model: User, attributes: ['username', 'avatar'] }] });
+   ```
+   - Komentar yang berasosiasi dengan video tertentu diambil, termasuk informasi pengguna yang membuat komentar.
+
+4. *Respon*
+   - Data komentar dikembalikan dengan status 200 (OK).
+
+---
+
+#### *Delete Comment*
+
+##### *Langkah-Langkah*
+1. *Ambil ID Komentar dan Pengguna*
+   ```javascript
+   const commentId = req.params.id;
+   const userId = req.user.id;
+   ```
+   - ID komentar diambil dari parameter URL, dan ID pengguna didapatkan dari token middleware.
+
+2. *Cek Keberadaan Komentar*
+   ```javascript
+   const comment = await Comment.findByPk(commentId);
+   ```
+   - Sistem memverifikasi keberadaan komentar.
+
+3. *Verifikasi Kepemilikan Komentar*
+   ```javascript
+   if (comment.user_id !== userId) {
+       return res.status(403).json({ message: "You can only delete your own comment" });
+   }
+   ```
+   - Sistem memastikan hanya pemilik komentar yang dapat menghapus komentar tersebut.
+
+4. *Hapus Komentar*
+   ```javascript
+   await comment.destroy();
+   ```
+   - Komentar dihapus dari database.
+
+5. *Respon*
+   - Status 200 (OK) dikembalikan jika penghapusan berhasil.
+
+---
+
+#### *Get Comment by ID*
+
+##### *Langkah-Langkah*
+1. *Ambil ID Komentar dari Parameter*
+   ```javascript
+   const commentId = req.params.id;
+   ```
+   - ID komentar diambil dari parameter URL.
+
+2. *Cek Keberadaan Komentar*
+   ```javascript
+   const comment = await Comment.findByPk(commentId, { include: [{ model: User, attributes: ['username', 'avatar'] }] });
+   ```
+   - Sistem memverifikasi keberadaan komentar dan mengambil informasi pengguna terkait.
+
+3. *Respon*
+   - Data komentar dikembalikan dengan status 200 (OK).
+
+---
+
+#### *Edit Comment*
+
+##### *Langkah-Langkah*
+1. *Ambil ID Komentar dan Data Input*
+   ```javascript
+   const commentId = req.params.id;
+   const { content } = req.body;
+   const userId = req.user.id;
+   ```
+   - ID komentar diambil dari parameter URL, isi komentar dari *request body*, dan ID pengguna dari token middleware.
+
+2. *Cek Keberadaan Komentar*
+   ```javascript
+   const comment = await Comment.findByPk(commentId);
+   ```
+   - Sistem memverifikasi keberadaan komentar.
+
+3. *Verifikasi Kepemilikan Komentar*
+   ```javascript
+   if (comment.user_id !== userId) {
+       return res.status(403).json({ message: "You can only edit your own comment" });
+   }
+   ```
+   - Sistem memastikan hanya pemilik komentar yang dapat mengedit komentar tersebut.
+
+4. *Perbarui Komentar*
+   ```javascript
+   comment.content = content;
+   await comment.save();
+   ```
+   - Komentar diperbarui di database.
+
+5. *Respon*
+   - Status 200 (OK) dikembalikan jika pembaruan berhasil.
+
+---
+
+#### *Get Comment Count*
+
+##### *Langkah-Langkah*
+1. *Ambil ID Video dari Parameter*
+   ```javascript
+   const videoId = req.params.video_id;
+   ```
+   - ID video diambil dari parameter URL.
+
+2. *Cek Keberadaan Video*
+   ```javascript
+   const video = await Video.findByPk(videoId);
+   ```
+   - Sistem memverifikasi keberadaan video.
+
+3. *Hitung Jumlah Komentar*
+   ```javascript
+   const commentCount = await Comment.count({ where: { video_id: videoId } });
+   ```
+   - Sistem menghitung total jumlah komentar yang berasosiasi dengan video.
+
+4. *Respon*
+   - Status 200 (OK) dikembalikan dengan jumlah total komentar.
+
+---
+
+# Like Video
+
+---
+
+## Endpoint 1: Like/Unlike Video
+
+### **URL**
+`POST /api/videos/:video_id/like`
+
+### **Header**
+- **Authorization**: Token JWT (required)
+
+### **Parameter URL**
+- **video_id**: ID dari video yang akan di-like/unlike.
+
+### **Deskripsi**
+Endpoint ini digunakan untuk memberikan "like" pada video atau membatalkan "like" (unlike) jika pengguna sebelumnya telah memberikan "like".
+
+### **Proses Backend**
+1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
+2. Sistem memeriksa apakah pengguna telah memberikan "like" sebelumnya:
+   - Jika sudah, maka sistem akan membatalkan "like".
+   - Jika belum, maka sistem akan membuat "like" baru.
+3. Sistem mengembalikan respons berdasarkan hasil proses.
+
+### **Respon**
+#### **Respon Sukses**
+- *Status Code*: `200 OK`
+- *Body*:
+  ```json
+  {
+    "message": "Video liked successfully"
+  }
+  ```
+  atau
+  ```json
+  {
+    "message": "Video unliked successfully"
+  }
+  ```
+
+#### **Respon Gagal**
+- *Status Code*: `404 Not Found`  
+  *Body*:  
+  ```json
+  {
+    "message": "Video not found"
+  }
+  ```
+- *Status Code*: `500 Internal Server Error`  
+  *Body*:  
+  ```json
+  {
+    "message": "Error liking video",
+    "error": {}
+  }
+  ```
+
+---
+
+## Endpoint 2: Get Like Count
+
+### **URL**
+`GET /api/videos/:video_id/like-count`
+
+### **Header**
+Tidak memerlukan header khusus.
+
+### **Parameter URL**
+- **video_id**: ID dari video yang jumlah "like"-nya akan dihitung.
+
+### **Deskripsi**
+Endpoint ini digunakan untuk mendapatkan jumlah total "like" pada video tertentu.
+
+### **Proses Backend**
+1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
+2. Sistem menghitung jumlah "like" pada video tersebut.
+3. Sistem mengembalikan jumlah "like" dalam format JSON.
+
+### **Respon**
+#### **Respon Sukses**
+- *Status Code*: `200 OK`
+- *Body*:
+  ```json
+  {
+    "likeCount": 100
+  }
+  ```
+
+#### **Respon Gagal**
+- *Status Code*: `404 Not Found`  
+  *Body*:  
+  ```json
+  {
+    "message": "Video not found"
+  }
+  ```
+- *Status Code*: `500 Internal Server Error`  
+  *Body*:  
+  ```json
+  {
+    "message": "Error fetching like count",
+    "error": {}
+  }
+  ```
+
+---
+
+## Endpoint 3: Check If User Liked Video
+
+### **URL**
+`GET /api/videos/:video_id/is-liked`
+
+### **Header**
+- **Authorization**: Token JWT (required)
+
+### **Parameter URL**
+- **video_id**: ID dari video yang akan dicek status "like"-nya oleh pengguna.
+
+### **Deskripsi**
+Endpoint ini digunakan untuk memeriksa apakah pengguna telah memberikan "like" pada video tertentu.
+
+### **Proses Backend**
+1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
+2. Sistem memeriksa apakah pengguna telah memberikan "like" pada video tersebut.
+3. Sistem mengembalikan respons sesuai dengan hasil pengecekan.
+
+### **Respon**
+#### **Respon Sukses**
+- *Status Code*: `200 OK`
+- *Body*:
+  ```json
+  {
+    "message": "User has liked this video"
+  }
+  ```
+  atau
+  ```json
+  {
+    "message": "User has not liked this video"
+  }
+  ```
+
+#### **Respon Gagal**
+- *Status Code*: `404 Not Found`  
+  *Body*:  
+  ```json
+  {
+    "message": "Video not found"
+  }
+  ```
+- *Status Code*: `500 Internal Server Error`  
+  *Body*:  
+  ```json
+  {
+    "message": "Error checking if user liked video",
+    "error": {}
+  }
+  ```
+
+---
+
+## Catatan Tambahan
+- Pastikan middleware otentikasi diterapkan pada endpoint yang membutuhkan token JWT.
+- Middleware otorisasi juga dapat diterapkan untuk memastikan bahwa hanya pengguna yang berwenang dapat memberikan "like" atau mengakses data.
+- Pastikan untuk mengganti nilai `process.env.JWT_SECRET` dengan kunci rahasia yang aman.
+- Jika dataset video atau like cukup besar, pertimbangkan untuk menambahkan optimasi query pada database.
+
+---
+
+### *Endpoint: Comment*
+
+#### *URL*
+1. **POST /api/comment/add/:video_id**
+2. **GET /api/comment/all/:video_id**
+3. **DELETE /api/comment/:id**
+4. **GET /api/comment/:id**
+5. **PUT /api/comment/:id**
+6. **GET /api/comment/count/:video_id**
+
+---
+
+#### *Header*
+- Untuk semua endpoint, sertakan token JWT di *header*:
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+
+---
+
+#### *Request Body*
+1. **Add Comment:**
+   ```json
+   {
+     "content": "This is a sample comment."
+   }
+   ```
+
+2. **Edit Comment:**
+   ```json
+   {
+     "content": "Updated comment content."
+   }
+   ```
+
+---
+
+#### *Respon*
+
+##### *Respon Sukses*
+1. *Add Comment*:  
+   *Status Code*: 201 Created  
+   *Body*:
+   ```json
+   {
+     "message": "Comment added successfully",
+     "comment": {
+       "id": 1,
+       "video_id": 10,
+       "user_id": 5,
+       "content": "This is a sample comment."
+     }
+   }
+   ```
+
+2. *Delete Comment*:  
+   *Status Code*: 200 OK  
+   *Body*:
+   ```json
+   {
+     "message": "Comment deleted successfully"
+   }
+   ```
+
+##### *Respon Gagal*
+1. *Data Tidak Ditemukan*:  
+   *Status Code*: 404 Not Found  
+   *Body*:
+   ```json
+   {
+     "message": "Comment not found"
+   }
+   ```
+
+2. *Server Error*:  
+   *Status Code*: 500 Internal Server Error  
+   *Body*:
+   ```json
+   {
+     "message": "Error adding comment",
+     "error": "<error details>"
+   }
+   ```
+
+---
+
+#### *Catatan*
+- Semua endpoint memerlukan autentikasi.
+- Validasi input penting untuk memastikan data komentar valid.
+
 
 
