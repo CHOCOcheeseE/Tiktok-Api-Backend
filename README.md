@@ -444,6 +444,175 @@ await user.destroy();
 - Validasi input penting untuk memastikan data video valid.
 
 ---
+# Like Video
+
+---
+
+## Endpoint 1: Like/Unlike Video
+
+### **URL**
+`POST /api/:video_id/like`
+
+### **Header**
+- **Authorization**: Token JWT (required)
+
+### **Parameter URL**
+- **video_id**: ID dari video yang akan di-like/unlike.
+
+### **Deskripsi**
+Endpoint ini digunakan untuk memberikan "like" pada video atau membatalkan "like" (unlike) jika pengguna sebelumnya telah memberikan "like".
+
+### **Proses Backend**
+1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
+2. Sistem memeriksa apakah pengguna telah memberikan "like" sebelumnya:
+   - Jika sudah, maka sistem akan membatalkan "like".
+   - Jika belum, maka sistem akan membuat "like" baru.
+3. Sistem mengembalikan respons berdasarkan hasil proses.
+
+### **Respon**
+#### **Respon Sukses**
+- *Status Code*: `200 OK`
+- *Body*:
+  ```json
+  {
+    "message": "Video liked successfully"
+  }
+  ```
+  atau
+  ```json
+  {
+    "message": "Video unliked successfully"
+  }
+  ```
+
+#### **Respon Gagal**
+- *Status Code*: `404 Not Found`  
+  *Body*:  
+  ```json
+  {
+    "message": "Video not found"
+  }
+  ```
+- *Status Code*: `500 Internal Server Error`  
+  *Body*:  
+  ```json
+  {
+    "message": "Error liking video",
+    "error": {}
+  }
+  ```
+
+---
+
+## Endpoint 2: Get Like Count
+
+### **URL**
+`GET /api/like-count/:video_id`
+
+### **Header**
+Tidak memerlukan header khusus.
+
+### **Parameter URL**
+- **video_id**: ID dari video yang jumlah "like"-nya akan dihitung.
+
+### **Deskripsi**
+Endpoint ini digunakan untuk mendapatkan jumlah total "like" pada video tertentu.
+
+### **Proses Backend**
+1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
+2. Sistem menghitung jumlah "like" pada video tersebut.
+3. Sistem mengembalikan jumlah "like" dalam format JSON.
+
+### **Respon**
+#### **Respon Sukses**
+- *Status Code*: `200 OK`
+- *Body*:
+  ```json
+  {
+    "likeCount": 100
+  }
+  ```
+
+#### **Respon Gagal**
+- *Status Code*: `404 Not Found`  
+  *Body*:  
+  ```json
+  {
+    "message": "Video not found"
+  }
+  ```
+- *Status Code*: `500 Internal Server Error`  
+  *Body*:  
+  ```json
+  {
+    "message": "Error fetching like count",
+    "error": {}
+  }
+  ```
+
+---
+
+## Endpoint 3: Check If User Liked Video
+
+### **URL**
+`GET /api/check-like/:video_id`
+
+### **Header**
+- **Authorization**: Token JWT (required)
+
+### **Parameter URL**
+- **video_id**: ID dari video yang akan dicek status "like"-nya oleh pengguna.
+
+### **Deskripsi**
+Endpoint ini digunakan untuk memeriksa apakah pengguna telah memberikan "like" pada video tertentu.
+
+### **Proses Backend**
+1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
+2. Sistem memeriksa apakah pengguna telah memberikan "like" pada video tersebut.
+3. Sistem mengembalikan respons sesuai dengan hasil pengecekan.
+
+### **Respon**
+#### **Respon Sukses**
+- *Status Code*: `200 OK`
+- *Body*:
+  ```json
+  {
+    "message": "User has liked this video"
+  }
+  ```
+  atau
+  ```json
+  {
+    "message": "User has not liked this video"
+  }
+  ```
+
+#### **Respon Gagal**
+- *Status Code*: `404 Not Found`  
+  *Body*:  
+  ```json
+  {
+    "message": "Video not found"
+  }
+  ```
+- *Status Code*: `500 Internal Server Error`  
+  *Body*:  
+  ```json
+  {
+    "message": "Error checking if user liked video",
+    "error": {}
+  }
+  ```
+
+---
+
+## Catatan Tambahan
+- Pastikan middleware otentikasi diterapkan pada endpoint yang membutuhkan token JWT.
+- Middleware otorisasi juga dapat diterapkan untuk memastikan bahwa hanya pengguna yang berwenang dapat memberikan "like" atau mengakses data.
+- Pastikan untuk mengganti nilai `process.env.JWT_SECRET` dengan kunci rahasia yang aman.
+- Jika dataset video atau like cukup besar, pertimbangkan untuk menambahkan optimasi query pada database.
+
+---
 
 # Comment
 
@@ -619,176 +788,6 @@ await user.destroy();
 
 4. *Respon*
    - Status 200 (OK) dikembalikan dengan jumlah total komentar.
-
----
-
-# Like Video
-
----
-
-## Endpoint 1: Like/Unlike Video
-
-### **URL**
-`POST /api/:video_id/like`
-
-### **Header**
-- **Authorization**: Token JWT (required)
-
-### **Parameter URL**
-- **video_id**: ID dari video yang akan di-like/unlike.
-
-### **Deskripsi**
-Endpoint ini digunakan untuk memberikan "like" pada video atau membatalkan "like" (unlike) jika pengguna sebelumnya telah memberikan "like".
-
-### **Proses Backend**
-1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
-2. Sistem memeriksa apakah pengguna telah memberikan "like" sebelumnya:
-   - Jika sudah, maka sistem akan membatalkan "like".
-   - Jika belum, maka sistem akan membuat "like" baru.
-3. Sistem mengembalikan respons berdasarkan hasil proses.
-
-### **Respon**
-#### **Respon Sukses**
-- *Status Code*: `200 OK`
-- *Body*:
-  ```json
-  {
-    "message": "Video liked successfully"
-  }
-  ```
-  atau
-  ```json
-  {
-    "message": "Video unliked successfully"
-  }
-  ```
-
-#### **Respon Gagal**
-- *Status Code*: `404 Not Found`  
-  *Body*:  
-  ```json
-  {
-    "message": "Video not found"
-  }
-  ```
-- *Status Code*: `500 Internal Server Error`  
-  *Body*:  
-  ```json
-  {
-    "message": "Error liking video",
-    "error": {}
-  }
-  ```
-
----
-
-## Endpoint 2: Get Like Count
-
-### **URL**
-`GET /api/like-count/:video_id`
-
-### **Header**
-Tidak memerlukan header khusus.
-
-### **Parameter URL**
-- **video_id**: ID dari video yang jumlah "like"-nya akan dihitung.
-
-### **Deskripsi**
-Endpoint ini digunakan untuk mendapatkan jumlah total "like" pada video tertentu.
-
-### **Proses Backend**
-1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
-2. Sistem menghitung jumlah "like" pada video tersebut.
-3. Sistem mengembalikan jumlah "like" dalam format JSON.
-
-### **Respon**
-#### **Respon Sukses**
-- *Status Code*: `200 OK`
-- *Body*:
-  ```json
-  {
-    "likeCount": 100
-  }
-  ```
-
-#### **Respon Gagal**
-- *Status Code*: `404 Not Found`  
-  *Body*:  
-  ```json
-  {
-    "message": "Video not found"
-  }
-  ```
-- *Status Code*: `500 Internal Server Error`  
-  *Body*:  
-  ```json
-  {
-    "message": "Error fetching like count",
-    "error": {}
-  }
-  ```
-
----
-
-## Endpoint 3: Check If User Liked Video
-
-### **URL**
-`GET /api/check-like/:video_id`
-
-### **Header**
-- **Authorization**: Token JWT (required)
-
-### **Parameter URL**
-- **video_id**: ID dari video yang akan dicek status "like"-nya oleh pengguna.
-
-### **Deskripsi**
-Endpoint ini digunakan untuk memeriksa apakah pengguna telah memberikan "like" pada video tertentu.
-
-### **Proses Backend**
-1. Sistem memverifikasi keberadaan video berdasarkan `video_id`.
-2. Sistem memeriksa apakah pengguna telah memberikan "like" pada video tersebut.
-3. Sistem mengembalikan respons sesuai dengan hasil pengecekan.
-
-### **Respon**
-#### **Respon Sukses**
-- *Status Code*: `200 OK`
-- *Body*:
-  ```json
-  {
-    "message": "User has liked this video"
-  }
-  ```
-  atau
-  ```json
-  {
-    "message": "User has not liked this video"
-  }
-  ```
-
-#### **Respon Gagal**
-- *Status Code*: `404 Not Found`  
-  *Body*:  
-  ```json
-  {
-    "message": "Video not found"
-  }
-  ```
-- *Status Code*: `500 Internal Server Error`  
-  *Body*:  
-  ```json
-  {
-    "message": "Error checking if user liked video",
-    "error": {}
-  }
-  ```
-
----
-
-## Catatan Tambahan
-- Pastikan middleware otentikasi diterapkan pada endpoint yang membutuhkan token JWT.
-- Middleware otorisasi juga dapat diterapkan untuk memastikan bahwa hanya pengguna yang berwenang dapat memberikan "like" atau mengakses data.
-- Pastikan untuk mengganti nilai `process.env.JWT_SECRET` dengan kunci rahasia yang aman.
-- Jika dataset video atau like cukup besar, pertimbangkan untuk menambahkan optimasi query pada database.
 
 ---
 
