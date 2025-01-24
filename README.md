@@ -1,7 +1,12 @@
 # Dokumentasi Tiktok-Api-Backend
 
 ## Deskripsi
-Kode ini berisi implementasi beberapa fitur user management, yaitu: **register**, **login**, **edit profile**, dan **delete user**. Fitur-fitur ini memungkinkan pengelolaan data pengguna dengan autentikasi menggunakan JWT dan enkripsi password dengan bcrypt.
+Kode ini berisi implementasi beberapa fitur user management, yaitu: **register**, **login**, **edit profile**, dan **delete user**. Fitur-fitur ini memungkinkan pengelolaan data pengguna dengan autentikasi menggunakan JWT dan enkripsi password dengan bcrypt, lalu ada juga bagian video seperti upload, get all video, get video by user, edit video, delete video, get video count, get video detail, lalu ada juga bagian like, ada beberapa juga endpoint nya seperti like video, unlike video, like count, dan check user if like, lalu terakhir ada bagian comment dengan beberapa endpointnya yaitu, add comment, get comment by video id, delete comment, get comment by comment id, edit comment, dan comment count. Semua endpoint ini saya tes menggunakan software postman
+---
+## Kelompok Tik Tok Api Endpoint
+- Salwa Khoirunnisa
+- Tresna Gunawa
+- Muhammad Fathir Bagas
 
 ---
 
