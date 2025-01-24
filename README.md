@@ -60,7 +60,7 @@ await user.destroy();
 ## Penjelasan Endpoint
 
 ### 1. Register User
-**URL**: **POST /api/auth/register**
+**URL**: **POST /api/users/register**
 
 **Header**:
 - `Content-Type`: `application/json`
@@ -97,7 +97,7 @@ await user.destroy();
 ---
 
 ### 2. Login User
-**URL**: **POST /api/auth/login**
+**URL**: **POST /api/users/login**
 
 **Header**:
 - `Content-Type`: `application/json`
@@ -142,7 +142,7 @@ await user.destroy();
 ---
 
 ### 3. Edit Profile
-**URL**: **PUT /api/auth/edit-profile**
+**URL**: **PUT /api/users/edit**
 
 **Header**:
 - `Authorization`: `Bearer JWT_TOKEN`
@@ -173,7 +173,7 @@ await user.destroy();
 ---
 
 ### 4. Delete User
-**URL**: **DELETE /api/auth/delete-user**
+**URL**: **DELETE /api/users/delete**
 
 **Header**:
 - `Authorization`: `Bearer JWT_TOKEN`
@@ -332,7 +332,7 @@ await user.destroy();
 
 #### *URL*
 1. **POST /api/video/upload**  
-2. **GET /api/video/all**  
+2. **GET /api/video/**  
 3. **GET /api/video/:id**  
 4. **PUT /api/video/:id**  
 5. **DELETE /api/video/:id**  
@@ -629,7 +629,7 @@ await user.destroy();
 ## Endpoint 1: Like/Unlike Video
 
 ### **URL**
-`POST /api/videos/:video_id/like`
+`POST /api/:video_id/like`
 
 ### **Header**
 - **Authorization**: Token JWT (required)
@@ -685,7 +685,7 @@ Endpoint ini digunakan untuk memberikan "like" pada video atau membatalkan "like
 ## Endpoint 2: Get Like Count
 
 ### **URL**
-`GET /api/videos/:video_id/like-count`
+`GET /api/like-count/:video_id`
 
 ### **Header**
 Tidak memerlukan header khusus.
@@ -733,7 +733,7 @@ Endpoint ini digunakan untuk mendapatkan jumlah total "like" pada video tertentu
 ## Endpoint 3: Check If User Liked Video
 
 ### **URL**
-`GET /api/videos/:video_id/is-liked`
+`GET /api/check-like/:video_id`
 
 ### **Header**
 - **Authorization**: Token JWT (required)
